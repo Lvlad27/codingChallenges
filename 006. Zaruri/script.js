@@ -13,15 +13,28 @@ const btnNew = document.querySelector('.btn--new');
 const btnRoll = document.querySelector('.btn--roll');
 const btnHold = document.querySelector('.btn--hold');
 
-// Starting conditions
-score0El.textContent = 0;
-score1El.textContent = 0;
-diceEl.classList.add('hidden');
+let scores, currentScore, activePlayer, playing;
 
-const scores = [0, 0];
-let currentScore = 0;
-let activePlayer = 0;
-let playing = true;
+// Starting conditions
+const init = function () {
+	scores = [0, 0];
+	currentScore = 0;
+	activePlayer = 0;
+	playing = true;
+
+	score0El.textContent = 0;
+	score1El.textContent = 0;
+	current0El.textContent = 0;
+	current1El.textContent = 0;
+
+	player0El.classList.add('player--active');
+	player1El.classList.remove('player--active');
+	player0El.classList.remove('player--winner');
+	player1El.classList.remove('player--winner');
+	diceEl.classList.add('hidden');
+};
+
+init();
 
 const switchPlayer = function () {
 	document.getElementById(`current--${activePlayer}`).textContent = 0;
@@ -61,7 +74,7 @@ btnHold.addEventListener('click', function () {
 		document.getElementById(`score--${activePlayer}`).textContent = scores[activePlayer];
 
 		// 2. Check if score is already 100. If true:
-		if (scores[activePlayer] >= 20) {
+		if (scores[activePlayer] >= 100) {
 			// Finish the game
 			playing = false;
 			diceEl.classList.add('hidden');
@@ -75,21 +88,4 @@ btnHold.addEventListener('click', function () {
 });
 
 // When pressing New Game button
-btnNew.addEventListener('click', function () {
-	// Restore initial values of player 1 and 2 scores
-	playing = true;
-	score0El.textContent = 0;
-	score1El.textContent = 0;
-
-	currentScore = 0;
-	activePlayer = 0;
-	scores[activePlayer] = 0;
-	document.getElementById(`score--${activePlayer}`).textContent = scores[activePlayer];
-	document.getElementById(`current--${activePlayer}`).textContent = currentScore;
-
-	document.querySelector(`.player--${activePlayer}`).classList.remove('player--winner');
-	document.querySelector(`.player--${activePlayer}`).classList.toggle('player--active');
-
-	diceEl.classList.add('hidden');
-	switchPlayer();
-});
+btnNew.addEventListener('click', init);
