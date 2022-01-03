@@ -46,6 +46,56 @@ prev.addEventListener('click', () => switchSlide('prev'));
 //
 slides.addEventListener('transitionend', checkIndex);
 
+slides.addEventListener('touchstart', dragStart);
+slides.addEventListener('touchmove', dragMove);
+slides.addEventListener('touchend', dragEnd);
+
+function dragStart(e) {
+	e.preventDefault();
+	initialPosition = slides.offsetLeft;
+
+	if (e.type == 'touchstart') {
+		posX1 = e.touches[0].clientX;
+	} else {
+		posX1 = e.clientX;
+
+		document.onmouseup = dragEnd;
+		document.onmousemove = dragMove;
+	}
+}
+
+function dragMove(e) {
+	if (e.type == 'touchmove') {
+		posX2 = posX1 - e.touches[0].clientX;
+		posX1 = e.touches[0].clientX;
+	} else {
+		posX2 = posX1 - e.clientX;
+		posX1 = e.clientX;
+	}
+
+	slides.style.left = `${slides.offsetLeft - posX2}px`;
+}
+
+function dragEnd() {
+	/* 
+    three possibilities:
+    1. next slide
+    2. prev slide
+    3. stay still
+    */
+	finalPosition = slides.offsetLeft;
+	if (finalPosition - initialPosition < -496) {
+		switchSlide('next', 'dragging');
+	} else if (finalPosition - initialPosition > 496) {
+		switchSlide('prev', 'dragging');
+	} else {
+		slides.style.left = `${initialPosition}px`;
+	}
+
+	document.onmouseup = null;
+	document.onmousemove = null;
+}
+
 // switchSlide function definition. Accepts one argument.
 function switchSlide(arg) {
 	// This adds a 'transition' class to the slides div when the images are translated. The transition class has a transition effect to make the images slide smoother.

@@ -36,6 +36,7 @@ function showSlides(n) {
 	}
 	slides[slideIndex - 1].style.display = 'block';
 	dots[slideIndex - 1].className += ' active';
+
 	console.log(`showSlides function is called so slideIndex= ${slideIndex} and n=${n}`);
 }
 
