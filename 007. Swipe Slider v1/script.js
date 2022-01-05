@@ -1,5 +1,6 @@
 let slideIndex = 1;
 const slides = document.getElementsByClassName('mySlides');
+console.log(slides);
 const dots = document.getElementsByClassName('dot');
 
 const next = document.getElementById('next');
