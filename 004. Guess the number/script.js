@@ -1,64 +1,56 @@
 'use strict';
 
-let numărSecret = Math.trunc(Math.random() * 20) + 1;
-let scor = 20;
-let punctaj = 0;
-const displayMessage = function (mesaj) {
-	document.querySelector('.mesaj').textContent = mesaj;
-};
-const displayScore = function (număr) {
-	document.querySelector('.scor').textContent = număr;
+let secretNumber = Math.trunc(Math.random() * 20) + 1;
+let score = 20;
+let highscore = 0;
+
+const displayMessage = function (message) {
+	document.querySelector('.message').textContent = message;
 };
 
-document.querySelector('.verificare').addEventListener('click', function () {
-	const ghici = Number(document.querySelector('.ghici').value);
-	console.log(ghici, typeof ghici);
+document.querySelector('.check').addEventListener('click', function () {
+	const guess = Number(document.querySelector('.guess').value);
+	console.log(guess, typeof guess);
 
-	// Când nu există input
-	if (!ghici) {
-		displayMessage('Scrie un număr!');
-	}
+	// When there is no input
+	if (!guess) {
+		displayMessage('⛔️ No number!');
 
-	// Când jucătorul câștigă
-	else if (ghici === numărSecret) {
-		displayMessage('Număr corect!');
-		document.querySelector('.număr').textContent = numărSecret;
+		// When player wins
+	} else if (guess === secretNumber) {
+		displayMessage('🎉 Correct Number!');
+		document.querySelector('.number').textContent = secretNumber;
 
 		document.querySelector('body').style.backgroundColor = '#60b347';
-		document.querySelector('.număr').style.width = '30rem';
+		document.querySelector('.number').style.width = '30rem';
 
-		if (scor > punctaj) {
-			punctaj = scor;
-			document.querySelector('.punctaj').textContent = punctaj;
+		if (score > highscore) {
+			highscore = score;
+			document.querySelector('.highscore').textContent = highscore;
 		}
-	}
 
-	// Când ghicește prost
-	else if (ghici !== numărSecret) {
-		if (scor > 1) {
-			displayMessage(ghici > numărSecret ? 'Prea mare!' : 'Prea mic!');
-			scor--;
-			displayScore(scor);
+		// When guess is wrong
+	} else if (guess !== secretNumber) {
+		if (score > 1) {
+			displayMessage(guess > secretNumber ? '📈 Too high!' : '📉 Too low!');
+			score--;
+			document.querySelector('.score').textContent = score;
 		} else {
-			displayMessage('Ai pierdut!');
-			displayScore(0);
+			displayMessage('💥 You lost the game!');
+			document.querySelector('.score').textContent = 0;
 		}
 	}
+});
 
-	// Când se apăsă 'Din nou!'
-	document.querySelector('.din-nou').addEventListener('click', function () {
-		// Se revine la valorile inițiale
-		numărSecret = Math.trunc(Math.random() * 20) + 1;
-		scor = 20;
+document.querySelector('.again').addEventListener('click', function () {
+	score = 20;
+	secretNumber = Math.trunc(Math.random() * 20) + 1;
 
-		// Se revine la condițiile inițiale ale mesajului, numărului, scorului și câmpul de ghicit
-		displayMessage('Ghicește...');
-		document.querySelector('.număr').textContent = '?';
-		displayScore(scor);
-		document.querySelector('.ghici').value = '';
+	displayMessage('Start guessing...');
+	document.querySelector('.score').textContent = score;
+	document.querySelector('.number').textContent = '?';
+	document.querySelector('.guess').value = '';
 
-		// Se revine la culoarea de fundal inițială cât și lățimea numărului ghicit
-		document.querySelector('body').style.backgroundColor = '#222';
-		document.querySelector('.număr').style.width = '15rem';
-	});
+	document.querySelector('body').style.backgroundColor = '#222';
+	document.querySelector('.number').style.width = '15rem';
 });
